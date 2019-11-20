@@ -1,6 +1,6 @@
 // 此文加为用户对象js文件
 var user = {
-    login: function(userName, userPassword) {
+    login: function(callback) {
         $('.input_sub').click(function() {
             var userName = $('.input_txt').val().trim();
             var userPassword = $('.input_pass').val().trim();
@@ -11,35 +11,24 @@ var user = {
             }
             $.post('http://localhost:8000/admin/login', { user_name: userName, password: userPassword }, function(res) {
                 console.log(res);
-                if (res.code == 200) {
-                    location.href = './index.html';
-                } else if (res.code == 400) {
-                    $('#warning').text(res.msg);
-                    $('#myModal').modal('show');
-                }
+                callback(res);
             })
         });
     },
-    logout: function() {
+    logout: function(callback) {
         $('#btnLogout').click(function() {
             var flag = confirm('确认退出？');
             if (flag) {
                 $.post('http://localhost:8000/admin/logout', function(res) {
-                    if (res.code == 200) {
-                        location.href = 'login.html';
-                    }
+                    callback(res);
                 });
             }
 
         });
     },
-    getInfo: function() {
+    getInfo: function(callback) {
         $.get('http://localhost:8000/admin/getuser', function(res) {
-            if (res.code == 200) {
-                console.log(res);
-                $('userImg').prop('src', res.data.user_pic);
-                $('.username').text(res.data.nickname);
-            }
+            callback(res);
         })
     }
 };

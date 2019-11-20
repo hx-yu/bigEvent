@@ -58,9 +58,19 @@
     <script src="js/user.js"></script>
     <script>
         // 用户退出
-        user.logout();
+        user.logout(function(result) {
+            if (result.code == 200) {
+                location.href = 'login.html';
+            }
+        });
         // 获取用户信息
-        user.getInfo();
+        user.getInfo(function(result) {
+            if (result.code == 200) {
+                console.log(result);
+                $('userImg').prop('src', result.data.user_pic);
+                $('.username').text(result.data.nickname);
+            }
+        });
     </script>
     <script>
         var $level01 = $('.level01');

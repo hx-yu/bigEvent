@@ -58,7 +58,14 @@
     <script src="js/bootstrap/js/bootstrap.min.js"></script>
     <script>
         // 用户登录
-        user.login();
+        user.login(function(result) {
+            if (result.code == 200) {
+                location.href = './index.html';
+            } else if (result.code == 400) {
+                $('#warning').text(result.msg);
+                $('#myModal').modal('show');
+            }
+        });
     </script>
 </body>
 
