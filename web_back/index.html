@@ -55,7 +55,8 @@
     <script src="js/jquery-1.12.4.min.js"></script>
     <!-- <script src="js/logout.js"></script> -->
     <!-- <script src="js/info.js"></script> -->
-    <script src="js/user.js"></script>
+    <script src="js/iTools/url.js"></script>
+    <script src="js/iTools/user.js"></script>
     <script>
         // 用户退出
         user.logout(function(result) {
@@ -69,7 +70,7 @@
                 console.log(result);
                 $('userImg').prop('src', result.data.user_pic);
                 $('.username').text(result.data.nickname);
-            }
+            };
         });
     </script>
     <script>

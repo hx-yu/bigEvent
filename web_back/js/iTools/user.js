@@ -9,7 +9,7 @@ var user = {
                 $('#myModal').modal('show');
                 return;
             }
-            $.post('http://localhost:8000/admin/login', { user_name: userName, password: userPassword }, function(res) {
+            $.post(APIURL.logIn, { user_name: userName, password: userPassword }, function(res) {
                 console.log(res);
                 callback(res);
             })
@@ -19,7 +19,7 @@ var user = {
         $('#btnLogout').click(function() {
             var flag = confirm('确认退出？');
             if (flag) {
-                $.post('http://localhost:8000/admin/logout', function(res) {
+                $.post(APIURL.logOut, function(res) {
                     callback(res);
                 });
             }
@@ -27,7 +27,7 @@ var user = {
         });
     },
     getInfo: function(callback) {
-        $.get('http://localhost:8000/admin/getuser', function(res) {
+        $.get(APIURL.getInfo, function(res) {
             callback(res);
         })
     }
