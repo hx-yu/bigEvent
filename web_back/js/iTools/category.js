@@ -9,5 +9,10 @@ var category = {
         $.post(APIURL.category_del, { 'id': id }, function(res) {
             callback(res);
         });
+    },
+    add: function(name, slug, callback) {
+        $.post(APIURL.category_add, { 'name': name, 'slug': slug }, function(res) {
+            callback(res)
+        });
     }
 }

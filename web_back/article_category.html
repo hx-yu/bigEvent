@@ -63,11 +63,11 @@
                     <form>
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">分类名称:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <input type="text" class="form-control category_name" id="recipient-name">
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="control-label">分类别名:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <input type="text" class="form-control category_slug" id="recipient-name">
                         </div>
                     </form>
                 </div>
@@ -79,36 +79,13 @@
         </div>
     </div>
 
-    <script>
-        $('#addModal').modal({
-            show: false,
-            backdrop: false
-        });
-
-        $('#model_shutoff').click(function() {
-            alert('shutoff');
-            $('#addModal').modal('hide');
-        });
-
-        $('#model_add').click(function() {
-            alert('add');
-            $('#addModal').modal('hide');
-        });
-
-        $('.category_table').delegate('a', 'click', function() {
-            if ($(this).hasClass('btn-info')) {
-                $('#addModal .modal-title').html('修改分类名称');
-                $('#addModal').modal('show');
-            }
-        })
-    </script>
     <script type="text/html" id="temp">
         {{each data item}}
         <tr>
             <td>{{item.name}}</td>
             <td>{{item.slug}}</td>
             <td class="text-center">
-                <a href="javascript:editTr({&quot;id&quot;:&quot;1&quot;,&quot;slug&quot;:&quot;uncategorized&quot;,&quot;name&quot;:&quot;未分类&quot;});" class="btn btn-info btn-xs">编辑</a>
+                <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
                 <a href="javascript:;" data_id={{item.id}} class="btn btn-danger btn-xs del">删除</a>
             </td>
         </tr>
@@ -130,7 +107,6 @@
         $('#category_list').on('click', '.del', function() {
             var id = $(this).attr('data_id');
             category.del(id, function(result) {
-                console.log(result);
                 if (confirm('确认删除分类') == false) {
                     return;
                 }
@@ -140,6 +116,32 @@
                     alert(result.msg);
                 }
             });
+        });
+
+        // 新增类别
+        $('#model_add').click(function() {
+            var name = $('.category_name').val().trim();
+            var slug = $('.category_slug').val().trim();
+            if (name == '' || slug == "") {
+                alert('不能为空');
+                return;
+            }
+            category.add(name, slug, function(result) {
+                if (result.code == 200) {
+                    console.log(result);
+                    getAndShow();
+                    $('.category_name').val('');
+                    $('.category_slug').val('');
+                    $('#addModal').modal('hide');
+                }
+            });
+        });
+
+        // 补充：点击新增关闭按钮关闭弹窗
+        $('#model_shutoff').click(function() {
+            $('#addModal').modal('hide');
+            $('.category_name').val('');
+            $('.category_slug').val('');
         });
     </script>
 
