@@ -4,4 +4,9 @@ var APIURL = {
     logIn: baseURL + '/admin/login',
     logOut: baseURL + '/admin/logout',
     getInfo: baseURL + '/admin/getuser',
+
+    category_show: baseURL + '/admin/category_search',
+    category_add: baseURL + '/admin/category_add',
+    category_del: baseURL + '/admin/category_delete',
+    category_edit: baseURL + '/admin/category_edit',
 }
