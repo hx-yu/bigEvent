@@ -18,6 +18,7 @@
     <script src="js/template-web.js"></script>
     <script src="js/iTools/category.js"></script>
     <script src="js/iTools/url.js"></script>
+    <script src="js/iTools/article.js"></script>
 </head>
 
 <body>
@@ -26,23 +27,26 @@
             写文章
         </div>
         <div class="container-fluid common_con">
-            <form class="form-horizontal article_form">
+            <form class="form-horizontal article_form" id="myform">
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="文章标题">
+                        <input type="text" name="title" class="form-control" id="inputEmail3" placeholder="文章标题">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
-                        <input type="file" id="exampleInputFile">
+                        <input type="file" name="cover" id="exampleInputFile">
+                    </div>
+                    <div>
+                        <img id="previewImg" src="" alt="" style="height: 400px;">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control">
+                        <select name="type" class="form-control">
                             <!-- <option>1</option> -->
                         </select>
                     </div>
@@ -52,7 +56,7 @@
                     <div class="col-sm-4">
 
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
+                            <input type="text" name="date" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"
                                     onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
@@ -71,7 +75,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">发布</button>
+                        <button type="button" class="btn btn-success send">发布</button>
                         <button type="submit" class="btn btn-default">存为草稿</button>
                     </div>
                 </div>
@@ -80,16 +84,35 @@
     </div>
     <script type="text/html" id="temp">
         {{each data item}}
-        <option>{{item.name}}</option>
+        <option value="{{item.id}}">{{item.name}}</option>
         {{/each}}
     </script>
     <script>
+        // 显示文章分类
         category.show(function(result) {
             if (result.code == 200) {
-                console.log(result);
                 var htmlStr = template('temp', result);
                 $('.form-control').html(htmlStr);
             }
+        });
+        // 文章封面预览
+        $('#exampleInputFile').change(function() {
+            var file = this.files[0];
+            if (file) {
+                var url = URL.createObjectURL(file);
+                $('#previewImg').prop('src', url);
+            }
+        });
+
+        // 发送文章
+        $('.send').click(function() {
+            var fd = new FormData(document.getElementById('myform'));
+            fd.append('state', '已发布');
+            fd.set('content', tinyMCE.activeEditor.getContent());
+            article.release(fd, function(result) {
+                console.log(result);
+            });
+
         });
     </script>
 </body>
