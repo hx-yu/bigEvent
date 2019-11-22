@@ -15,6 +15,9 @@
     <script src="js/jedate/js/jedate.js"></script>
     <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <script src="js/template-web.js"></script>
+    <script src="js/iTools/category.js"></script>
+    <script src="js/iTools/url.js"></script>
 </head>
 
 <body>
@@ -40,11 +43,7 @@
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
                         <select class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <!-- <option>1</option> -->
                         </select>
                     </div>
                 </div>
@@ -79,7 +78,20 @@
             </form>
         </div>
     </div>
-
+    <script type="text/html" id="temp">
+        {{each data item}}
+        <option>{{item.name}}</option>
+        {{/each}}
+    </script>
+    <script>
+        category.show(function(result) {
+            if (result.code == 200) {
+                console.log(result);
+                var htmlStr = template('temp', result);
+                $('.form-control').html(htmlStr);
+            }
+        });
+    </script>
 </body>
 
 </html>
