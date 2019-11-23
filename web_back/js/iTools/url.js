@@ -12,5 +12,5 @@ var APIURL = {
 
     article_release: baseURL + '/admin/article_publish',
     article_search: baseURL + '/admin/search',
-    article_del: baseURL + '/admin/article_delete'
+    article_del: baseURL + '/admin/article_delete',
 }

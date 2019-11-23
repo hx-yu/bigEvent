@@ -20,7 +20,8 @@ var article = {
         });
     },
     del: function(id, callback) {
-        $.post(APIURL.category_del, { 'id': id }, function(res) {
+        console.log(id);
+        $.get(APIURL.article_del, { 'id': id }, function(res) {
             callback(res);
         });
     }
