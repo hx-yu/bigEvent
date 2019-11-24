@@ -24,5 +24,22 @@ var article = {
         $.get(APIURL.article_del, { 'id': id }, function(res) {
             callback(res);
         });
+    },
+    search: function(id, callback) {
+        $.get(APIURL.article_search, { 'id': id }, function(res) {
+            callback(res);
+        });
+    },
+    edit: function(fd, callback) {
+        $.ajax({
+            type: 'post',
+            url: APIURL.article_edit,
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function(res) {
+                callback(res);
+            }
+        });
     }
 }
