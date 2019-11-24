@@ -9,6 +9,10 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/iTools/url.js"></script>
+    <script src="js/iTools/article.js"></script>
+    <script src="js/iTools/category.js"></script>
 </head>
 
 <body>
@@ -59,14 +63,13 @@
                 当前位置： <a href="#">首页</a> &gt; <a href="#">科技</a> &gt; 文章详情
             </div>
             <h3 class="article_title">马斯克的新花样？连接人脑和电脑的初创公司又筹了一笔钱</h3>
-            <div class="article_info">杰克 发布于 2019-05-08 07:08:46&nbsp;&nbsp;&nbsp;分类: 奇趣事&nbsp;&nbsp;&nbsp;阅读:
-                (98)&nbsp;&nbsp;&nbsp;评论: (0)</div>
-            <div class="article_con">
+            <div class="article_info"><span id="article_author">杰克</span> 发布于 <span id="article_date">2019-05-08 07:08:46</span>&nbsp;&nbsp;&nbsp;分类: <span id="article_type">奇趣事</span>&nbsp;&nbsp;&nbsp;阅读: (98)&nbsp;&nbsp;&nbsp;评论: (0)</div>
+            <div class="article_con" id="article_content">
 
                 <p>“上天入地”还不够？硅谷“钢铁侠”马斯克名下一家低调的公司最近又融了一大笔钱。</p>
 
-                <p>马斯克投资的一家小型且不为人熟知的脑机接口（brain-computer
-                    interface）公司Neuralink披露，该公司融到了3900万美元，虽然不及公司计划的融资额5100万美元，但也比上次的融资多了不少。</p>
+                <p>马斯克投资的一家小型且不为人熟知的脑机接口（brain-computer interface）公司Neuralink披露，该公司融到了3900万美元，虽然不及公司计划的融资额5100万美元，但也比上次的融资多了不少。
+                </p>
 
                 <p>两年前该公司曾计划融资1亿美元，但只拿到了2700万美元的融资。</p>
 
@@ -76,8 +79,7 @@
 
             </div>
             <div class="article_links">
-                上一篇： <a href="#">世界第一台可以玩游戏的冰箱</a><br>
-                下一篇： <a href="#">世界第一个可以玩游戏的马桶、世界上第一个可以玩游戏的茶杯</a>
+                上一篇： <a href="#">世界第一台可以玩游戏的冰箱</a><br> 下一篇： <a href="#">世界第一个可以玩游戏的马桶、世界上第一个可以玩游戏的茶杯</a>
             </div>
 
             <form action="" class="comment_form">
@@ -204,7 +206,34 @@
         <p>CopyRight © 2019 深圳大事件信息技术股份有限公司 All Rights Reserved</p>
         <p>电话：0755-****888 粤ICP备*******8号</p>
     </div>
-
+    <script>
+        // 获取id
+        var id = location.search.slice(4);
+        // 获取文章详情
+        article.find(id, function(result) {
+            if (result.code == 200) {
+                console.log(result);
+                $('.article_title').text(result.data.title);
+                $('#article_author').text(result.data.author);
+                $('#article_date').text(result.data.date);
+                // $('#article_type').text(result.data.type);
+                $('#article_content').html(result.data.content);
+                var typeId = result.data.type;
+                // 获取文章的类型
+                category.show(function(result) {
+                    if (result.code == 200) {
+                        var rs = result.data.find(function(item) {
+                            if (item.id == typeId) {
+                                return true
+                            }
+                        });
+                        console.log(rs);
+                        $('#article_type').text(rs.name);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
