@@ -1,7 +1,7 @@
 // 此文件为文章发布、编辑、删除js文件
 var article = {
-    show: function(pages, callback) {
-        $.get(APIURL.article_search, { 'page': pages },
+    show: function(temporaryState, temporaryType, pages, callback) {
+        $.get(APIURL.article_search, { 'page': pages, 'type': temporaryType, 'state': temporaryState },
 
             function(res) {
                 callback(res);

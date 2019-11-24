@@ -76,7 +76,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="button" class="btn btn-success send">发布</button>
-                        <button type="submit" class="btn btn-default">存为草稿</button>
+                        <button type="button" class="btn btn-default save">存为草稿</button>
                     </div>
                 </div>
             </form>
@@ -111,6 +111,28 @@
             fd.set('content', tinyMCE.activeEditor.getContent());
             article.release(fd, function(result) {
                 console.log(result);
+
+                if (result.code == 201) {
+                    alert(result.msg);
+                    location.href = 'article_list.html';
+                }
+            });
+
+        });
+
+        // 保存文章
+        // 发送文章
+        $('.save').click(function() {
+            var fd = new FormData(document.getElementById('myform'));
+            fd.append('state', '草稿');
+            fd.set('content', tinyMCE.activeEditor.getContent());
+            article.release(fd, function(result) {
+                console.log(result);
+
+                if (result.code == 201) {
+                    alert(result.msg);
+                    location.href = 'article_list.html';
+                }
             });
 
         });
