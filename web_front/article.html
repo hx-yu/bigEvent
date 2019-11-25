@@ -14,6 +14,9 @@
     <script src="js/iTools/article.js"></script>
     <script src="js/iTools/category.js"></script>
     <script src="js/template-web.js"></script>
+    <script src="js/dayjs/dayjs.min.js"></script>
+    <script src="js/dayjs/relative.min.js"></script>
+    <script src="js/dayjs/zh_cn.js"></script>
 </head>
 
 <body>
@@ -101,13 +104,13 @@
             </div>
 
             <div class="comment_list_con">
-                <div class="comment_detail_list">
+                <!-- <div class="comment_detail_list">
                     <div class="person_pic fl">乔</div>
                     <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
                     <div class="comment_text fl">
                         遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="right_con setfl">
@@ -190,12 +193,18 @@
         {{each data item}}
         <div class="comment_detail_list">
             <div class="person_pic fl">{{item.name.substr(0,1)}}</div>
-            <div class="name_time fl"><b>{{item.name}}</b><span>{{item.dt}}</span></div>
+            <div class="name_time fl"><b>{{item.name}}</b><span>{{item.relativeDt}}</span></div>
             <div class="comment_text fl">{{item.content}}</div>
         </div>
         {{/each}}
     </script>
     <script>
+        // dayjs使用插件,所以就有了 dayjs_plugin_relativeTime
+        dayjs.extend(dayjs_plugin_relativeTime);
+
+        // dayjs设置语言
+        dayjs.locale('zh-cn');
+
         // 获取id
         var id = location.search.slice(4);
         // 获取文章详情
@@ -253,6 +262,10 @@
                 if (result.code == 200) {
                     console.log(result);
                     result.data.reverse(); // 翻转数据，让最新发表的评论在最前边
+                    // 插件转换时间
+                    result.data.forEach(function(item) {
+                        item.relativeDt = dayjs(item.dt).toNow();
+                    });
                     var htmlStr = template('temp_comment', result);
                     $('.comment_list_con').html(htmlStr);
                 }
