@@ -13,6 +13,7 @@
     <script src="js/iTools/url.js"></script>
     <script src="js/iTools/article.js"></script>
     <script src="js/iTools/category.js"></script>
+    <script src="js/template-web.js"></script>
 </head>
 
 <body>
@@ -92,7 +93,7 @@
                     <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
                 </div>
                 <div class="form_group">
-                    <input type="submit" name="" value="评 论" class="comment_sub"></div>
+                    <input type="button" name="" value="评 论" class="comment_sub"></div>
             </form>
 
             <div class="comment_count">
@@ -102,27 +103,6 @@
             <div class="comment_list_con">
                 <div class="comment_detail_list">
                     <div class="person_pic fl">乔</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">段</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">虚</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">王</div>
                     <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
                     <div class="comment_text fl">
                         遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
@@ -206,6 +186,15 @@
         <p>CopyRight © 2019 深圳大事件信息技术股份有限公司 All Rights Reserved</p>
         <p>电话：0755-****888 粤ICP备*******8号</p>
     </div>
+    <script type="text/html" id="temp_comment">
+        {{each data item}}
+        <div class="comment_detail_list">
+            <div class="person_pic fl">{{item.name.substr(0,1)}}</div>
+            <div class="name_time fl"><b>{{item.name}}</b><span>{{item.dt}}</span></div>
+            <div class="comment_text fl">{{item.content}}</div>
+        </div>
+        {{/each}}
+    </script>
     <script>
         // 获取id
         var id = location.search.slice(4);
@@ -228,11 +217,47 @@
                             }
                         });
                         console.log(rs);
-                        $('#article_type').text(rs.name);
+                        if (rs) {
+                            $('#article_type').text(rs.name);
+                        }
                     }
                 });
             }
         });
+
+        // 发表评论
+        $('.comment_sub').click(function() {
+            var name = $('.comment_name').val().trim();
+            var comment = $('.comment_input').val().trim();
+            if (name == '' || comment == '') {
+                alert('不能为空');
+                return
+            }
+            console.log(name, comment);
+            article.add(id, name, comment, function(result) {
+                if (result.code == 200) {
+                    console.log(result);
+                    alert('评论成功');
+                    $('.comment_name').val('');
+                    $('.comment_input').val('');
+                    getAndShow();
+                }
+            });
+        });
+
+        // 获取评论
+        getAndShow();
+
+        function getAndShow() {
+            article.get(id, function(result) {
+                if (result.code == 200) {
+                    console.log(result);
+                    result.data.reverse(); // 翻转数据，让最新发表的评论在最前边
+                    var htmlStr = template('temp_comment', result);
+                    $('.comment_list_con').html(htmlStr);
+                }
+            });
+        }
     </script>
 </body>
 

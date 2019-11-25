@@ -9,5 +9,17 @@ var article = {
         $.get(APIURL.article_search, { 'id': id }, function(res) {
             callback(res);
         });
+    },
+    // 添加评论
+    add: function(id, name, content, callback) {
+        $.post(APIURL.comment_add, { 'id': id, 'name': name, 'content': content }, function(res) {
+            callback(res);
+        });
+    },
+    // 获取评论
+    get: function(id, callback) {
+        $.get(APIURL.comment_get, { 'id': id }, function(res) {
+            callback(res);
+        });
     }
 }
